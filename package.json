@@ -1,0 +1,28 @@
+{
+  "name": "sitecore-nextjs-app-router",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "react": "^18",
+    "react-dom": "^18",
+    "next": "14.2.5",
+  		"@sitecore-cloudsdk/events": "^0.3.1",
+		"@sitecore-feaas/clientside": "^0.5.18",
+		"@sitecore-jss/sitecore-jss-nextjs": "~22.0.0",
+		"@sitecore/components": "^1.1.10"
+  },
+  "devDependencies": {
+    "typescript": "^5",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1"
+  }
+}
