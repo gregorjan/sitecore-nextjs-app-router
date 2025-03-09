@@ -9,13 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "react": "^18",
-    "react-dom": "^18",
-    "next": "14.2.5",
-  		"@sitecore-cloudsdk/events": "^0.3.1",
-		"@sitecore-feaas/clientside": "^0.5.18",
-		"@sitecore-jss/sitecore-jss-nextjs": "~22.0.0",
-		"@sitecore/components": "^1.1.10"
+    "@next/env": "^15.1.3",
+    "@sitecore-cloudsdk/events": "^0.4.2",
+    "@sitecore-feaas/clientside": "^0.5.19",
+    "@sitecore-jss/sitecore-jss": "~22.3.1",
+    "@sitecore-jss/sitecore-jss-nextjs": "~22.3.1",
+    "@sitecore/components": "~2.0.1",
+    "next": "^15.1.3",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "style-attr": "^1.3.0",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "typescript": "^5",
