@@ -3,8 +3,6 @@ import type { LayoutServiceData } from "@sitecore-jss/sitecore-jss-nextjs";
 import { gql } from "graphql-request";
 import { client } from "./client";
 
-export const GRAPHQL_LAYOUT_QUERY_NAME = "";
-
 const layoutQuery = gql`
 query JssLayoutQuery(
   $site: String!
