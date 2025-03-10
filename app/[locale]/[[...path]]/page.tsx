@@ -4,15 +4,16 @@ import type { Metadata, ResolvingMetadata } from "next";
 import type { NextPageProps } from "@/lib/types";
 import Layout from "@/base/Layout";
 import {
-	getDictionaryService,
-	getLayoutService,
-} from "@/lib/services";
+	getLayoutData,
+} from "@/lib/graphql/layout";
+import {
+	getDictionaryData,
+} from "@/lib/graphql/dictionary";
 import { extractPath } from "@/lib/utils/extract-path";
 import { jssConfig } from "@/jssConfig";
 import { notFound } from "next/navigation";
 
-const layoutService = getLayoutService(jssConfig.sitecoreSiteName);
-const dictionaryService = getDictionaryService(jssConfig.sitecoreSiteName);
+// const dictionaryService = getDictionaryService(jssConfig.sitecoreSiteName);
 
 export default async function Page({ params }: NextPageProps) {
 	const { locale, path } = await params;
@@ -20,8 +21,8 @@ export default async function Page({ params }: NextPageProps) {
 	const extractedPath = extractPath(path);
 
 	const [layoutData, dictionary] = await Promise.all([
-		layoutService.fetchLayoutData(extractedPath, locale),
-		dictionaryService.fetchDictionaryData(locale),
+		getLayoutData(extractedPath, locale),
+		getDictionaryData(locale),
 	]);
 
 	if (!layoutData?.sitecore?.route) {
@@ -37,7 +38,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
 	const { locale, path } = await params;
 	const extractedPath = extractPath(path);
-	const layoutData = await layoutService.fetchLayoutData(extractedPath, locale);
+	const layoutData = await getLayoutData(extractedPath, locale);
 
 	const { Headline, Description } = layoutData.sitecore.route?.fields as {
 		Headline: { value: string };
