@@ -23,8 +23,6 @@ const Layout: React.FC<LayoutProps> = ({ layoutData, dictionary }) => {
 	const { pageEditing, editMode } = context;
 	const componentFactory = componentBuilder.getComponentFactory();
 
-	console.log(dictionary)
-
 	const { headerPlaceholders, mainPlaceholders, footerPlaceholders } =
 		Object.keys(route?.placeholders ?? {}).reduce(
 			(acc, placeholderKey) => {
