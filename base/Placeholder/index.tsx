@@ -1,4 +1,4 @@
-'use client'
+"use server";
 
 import type { ComponentRendering } from "@sitecore-jss/sitecore-jss/layout";
 import type { PlaceholderProps } from "./types";
@@ -7,11 +7,8 @@ import {
 	TransformedComponent,
 	getPlaceholderDataFromRenderingData,
 } from "./utils";
-import { componentBuilder } from "@/components/builder";
 
-const componentFactory = componentBuilder.getComponentFactory()
-
-export const Placeholder: React.FC<PlaceholderProps> = (props) => {
+export const Placeholder: React.FC<PlaceholderProps> = async (props) => {
 	const placeholderData = getPlaceholderDataFromRenderingData(
 		props.rendering,
 		props.name,
@@ -21,9 +18,9 @@ export const Placeholder: React.FC<PlaceholderProps> = (props) => {
 		.map((rendering, index) => {
 			const component = (
 				<TransformedComponent
+					{...props}
 					key={rendering.uid}
 					rendering={rendering}
-					props={{...props, componentFactory}}
 				/>
 			);
 
@@ -44,8 +41,11 @@ export const Placeholder: React.FC<PlaceholderProps> = (props) => {
 	}
 
 	return (
-		// <Metadata rendering={props.rendering as ComponentRendering} name={props.name}>
-		<>{transformedComponents}</>
-		// </Metadata>
+		<Metadata
+			rendering={props.rendering as ComponentRendering}
+			name={props.name}
+		>
+			{transformedComponents}
+		</Metadata>
 	);
 };

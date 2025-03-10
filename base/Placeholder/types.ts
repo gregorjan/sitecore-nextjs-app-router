@@ -1,6 +1,8 @@
 import type { ComponentProps } from "@/lib/types";
+import type { ComponentFactory } from "@sitecore-jss/sitecore-jss-nextjs";
 import type {
 	ComponentRendering,
+	EditMode,
 	Field,
 	Item,
 	RouteData,
@@ -18,6 +20,9 @@ export interface PlaceholderProps {
 	modifyComponentProps?: ModifyComponentProps;
 	render?: Render;
 	renderEach?: RenderEach;
+	editMode?: EditMode;
+	pageEditing?: boolean;
+	componentFactory: ComponentFactory
 }
 
 export type ModifyComponentProps = (

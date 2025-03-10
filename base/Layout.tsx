@@ -5,19 +5,23 @@ import type {
 	LayoutServiceData,
 	RouteData,
 } from "@sitecore-jss/sitecore-jss-nextjs";
+import { componentBuilder } from "@/components/builder";
 import { Placeholder } from "./Placeholder";
 
 interface LayoutProps {
 	layoutData: LayoutServiceData;
-	dictionary: DictionaryPhrases
+	dictionary: DictionaryPhrases;
 }
 
 const HEADER_KEY = "-header";
 const FOOTER_KEY = "-footer";
 
-const Layout: React.FC<LayoutProps> = ({ layoutData, dictionary }) => {
 
-	const { route } = layoutData.sitecore;
+
+const Layout: React.FC<LayoutProps> = ({ layoutData, dictionary }) => {
+	const { route, context } = layoutData.sitecore;
+	const { pageEditing, editMode } = context;
+	const componentFactory = componentBuilder.getComponentFactory();
 
 	const { headerPlaceholders, mainPlaceholders, footerPlaceholders } =
 		Object.keys(route?.placeholders ?? {}).reduce(
@@ -29,6 +33,9 @@ const Layout: React.FC<LayoutProps> = ({ layoutData, dictionary }) => {
 						key={placeholderKey}
 						name={placeholderKey}
 						rendering={route as RouteData}
+						editMode={editMode}
+						pageEditing={pageEditing}
+						componentFactory={componentFactory}
 					/>
 				);
 

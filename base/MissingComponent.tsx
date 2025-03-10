@@ -12,15 +12,7 @@ export const MissingComponent: React.FC<MissingComponentProps> = (props) => {
 	// error override would mean component is not unimplemented
 	const errorMessage = `JSS component ${componentName} variant ${variantName} is missing React implementation. See the developer console for more information.`;
 	return (
-		<div
-			style={{
-				background: "darkorange",
-				outline: "5px solid orange",
-				padding: "10px",
-				color: "white",
-				maxWidth: "500px",
-			}}
-		>
+		<div className="max-w-[500px] bg-orange-500 text-white p-2.5 text-base-white outline-6 outline-orange-600">
 			<p>{errorMessage}</p>
 		</div>
 	);
