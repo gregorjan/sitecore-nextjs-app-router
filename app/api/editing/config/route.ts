@@ -1,5 +1,3 @@
-"use server";
-
 import { components as builderComponents } from "@/components/builder";
 import { serverConfig } from "@/lib/config.server";
 import { enforceCors } from "@/lib/utils/enforce-cors";
