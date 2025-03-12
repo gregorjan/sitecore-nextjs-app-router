@@ -1,5 +1,3 @@
-'use server'
-
 import type {
 	DictionaryPhrases,
 	LayoutServiceData,
@@ -17,8 +15,7 @@ const HEADER_KEY = "-header";
 const FOOTER_KEY = "-footer";
 
 
-
-const Layout: React.FC<LayoutProps> = async ({ layoutData, dictionary }) => {
+export const PageLayout : React.FC<LayoutProps> = ({ layoutData, dictionary }) => {
 	const { route, context } = layoutData.sitecore;
 	const { pageEditing, editMode } = context;
 	const componentFactory = componentBuilder.getComponentFactory();
@@ -62,13 +59,11 @@ const Layout: React.FC<LayoutProps> = async ({ layoutData, dictionary }) => {
 		<>
 			{route && (
 				<>
-					{/* {headerPlaceholders} */}
+					{headerPlaceholders}
 					<main>{mainPlaceholders}</main>
-					{/* {footerPlaceholders} */}
+					{footerPlaceholders}
 				</>
 			)}
 		</>
 	);
 };
-
-export default Layout;

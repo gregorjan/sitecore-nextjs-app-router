@@ -1,5 +1,3 @@
-'use server'
-
 import { Placeholder } from "@/base/Placeholder";
 import type {
 	ComponentFactory,
@@ -18,7 +16,7 @@ type DynamicPlaceholderProps = {
 
 const PartialDesignDynamicPlaceholder: React.FC<
 	DynamicPlaceholderProps
-> = async (props: DynamicPlaceholderProps) => {
+> = (props: DynamicPlaceholderProps) => {
 
 	return (
 		<Placeholder
