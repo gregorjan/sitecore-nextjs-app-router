@@ -1,7 +1,7 @@
-import { jssConfig } from "@/jssConfig";
 import type { LayoutServiceData } from "@sitecore-jss/sitecore-jss-nextjs";
 import { gql } from "graphql-request";
 import { client } from "./client";
+import { serverConfig } from "../config.server";
 
 const layoutQuery = gql`
 query JssLayoutQuery(
@@ -26,7 +26,7 @@ export const getLayoutData = async (
 	language?: string,
 ): Promise<LayoutServiceData> => {
 	const data = await client.request<LayoutResponse>(layoutQuery, {
-		site: jssConfig.sitecoreSiteName,
+		site: serverConfig.sitecoreSiteName,
 		routePath,
 		language,
 	});

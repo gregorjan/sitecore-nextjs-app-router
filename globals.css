@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+.scChromeData,
+.scpm {
+	display: none !important;
+}
+
+/* hide ck richtext ballon */
+.ck {
+	.ck-powered-by-balloon {
+		display: none !important;
+	}
+}
+
+/* richtext field placeholder text color */
+.ck .ck-placeholder:before,
+.ck.ck-placeholder:before {
+	color: inherit !important;
+}
+
+:root {
+	--ck-spacing-standard: 0 !important;
+}
