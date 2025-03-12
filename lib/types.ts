@@ -34,5 +34,5 @@ export type NextPageProps = {
 export type ComponentProps = {
 	rendering: ComponentRendering;
 	params?: ComponentParams & { RenderingIdentifier?: string };
-	fields?: ComponentFields 
+	fields?: ComponentFields;
 };

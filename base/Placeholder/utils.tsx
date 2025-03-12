@@ -45,16 +45,6 @@ export const getPlaceholderDataFromRenderingData = (
 	return [];
 };
 
-export const getComponentForRendering = (
-	renderingDefinition: ComponentRendering,
-	componentFactory: ComponentFactory,
-): ComponentType | null => {
-	return componentFactory(
-		renderingDefinition.componentName,
-		renderingDefinition.params?.FieldNames,
-	);
-};
-
 export const Metadata: React.FC<
 	PropsWithChildren<{
 		rendering: ComponentRendering;

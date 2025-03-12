@@ -1,5 +1,3 @@
-"use server";
-
 import type { ComponentRendering } from "@sitecore-jss/sitecore-jss/layout";
 import type { PlaceholderProps } from "./types";
 import {
@@ -8,7 +6,7 @@ import {
 	getPlaceholderDataFromRenderingData,
 } from "./utils";
 
-export const Placeholder: React.FC<PlaceholderProps> = async (props) => {
+export const Placeholder: React.FC<PlaceholderProps> = (props) => {
 	const placeholderData = getPlaceholderDataFromRenderingData(
 		props.rendering,
 		props.name,
@@ -44,6 +42,7 @@ export const Placeholder: React.FC<PlaceholderProps> = async (props) => {
 		<Metadata
 			rendering={props.rendering as ComponentRendering}
 			name={props.name}
+			editMode={props.editMode}
 		>
 			{transformedComponents}
 		</Metadata>

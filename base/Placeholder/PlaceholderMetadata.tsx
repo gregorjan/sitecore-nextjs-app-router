@@ -1,5 +1,3 @@
-'use server'
-
 import { DEFAULT_PLACEHOLDER_UID, MetadataKind } from '@sitecore-jss/sitecore-jss/editing'
 import {
 	type ComponentRendering,
@@ -29,7 +27,7 @@ type MetadataCodeProps = {
 	placeholderName?: string
 }
 
-const MetadataCode: React.FC<MetadataCodeProps> = async ({ rendering, kind, placeholderName }) => {
+const MetadataCode: React.FC<MetadataCodeProps> = ({ rendering, kind, placeholderName }) => {
 	const { uid, placeholders } = rendering as ComponentRendering
 	const chrometype = placeholderName ? 'placeholder' : 'rendering'
 
@@ -56,7 +54,7 @@ const MetadataCode: React.FC<MetadataCodeProps> = async ({ rendering, kind, plac
 	return <code {...attributes} />
 }
 
-export const PlaceholderMetadata = async ({
+export const PlaceholderMetadata = ({
 	rendering,
 	placeholderName,
 	children,

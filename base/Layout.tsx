@@ -1,4 +1,4 @@
-"use server";
+'use server'
 
 import type {
 	DictionaryPhrases,
@@ -18,7 +18,7 @@ const FOOTER_KEY = "-footer";
 
 
 
-const Layout: React.FC<LayoutProps> = ({ layoutData, dictionary }) => {
+const Layout: React.FC<LayoutProps> = async ({ layoutData, dictionary }) => {
 	const { route, context } = layoutData.sitecore;
 	const { pageEditing, editMode } = context;
 	const componentFactory = componentBuilder.getComponentFactory();
@@ -62,9 +62,9 @@ const Layout: React.FC<LayoutProps> = ({ layoutData, dictionary }) => {
 		<>
 			{route && (
 				<>
-					{headerPlaceholders}
+					{/* {headerPlaceholders} */}
 					<main>{mainPlaceholders}</main>
-					{footerPlaceholders}
+					{/* {footerPlaceholders} */}
 				</>
 			)}
 		</>

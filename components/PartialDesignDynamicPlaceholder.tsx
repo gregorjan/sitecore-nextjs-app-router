@@ -1,4 +1,4 @@
-"use server";
+'use server'
 
 import { Placeholder } from "@/base/Placeholder";
 import type {

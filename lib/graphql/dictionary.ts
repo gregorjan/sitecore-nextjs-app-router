@@ -1,8 +1,9 @@
-import { jssConfig } from "@/jssConfig";
 import type { DictionaryPhrases } from "@sitecore-jss/sitecore-jss-nextjs";
 import { gql } from "graphql-request";
 import { client } from "./client";
 import type { DictionarySiteQueryResponse } from "@sitecore-jss/sitecore-jss/types/i18n/graphql-dictionary-service";
+import { parseDictionary } from "../utils/parse-dictionary";
+import { serverConfig } from "../config.server";
 
 const dictionaryQuery = gql`
  query DictionarySiteQuery(
@@ -22,19 +23,20 @@ const dictionaryQuery = gql`
  }
 `;
 
-export const getDictionaryData = async (language?: string): Promise<DictionaryPhrases> => {
+export const getDictionaryData = async (
+	language?: string,
+): Promise<DictionaryPhrases> => {
 	const data = await client.request<DictionarySiteQueryResponse>(
 		dictionaryQuery,
 		{
-			siteName: jssConfig.sitecoreSiteName,
+			siteName: serverConfig.sitecoreSiteName,
 			language,
 		},
 	);
 
-	const results = data.site.siteInfo.dictionary.results;
-
-	return results.reduce((acc, { key, value }) => {
-		acc[key] = value;
-		return acc;
-	}, {} as DictionaryPhrases);
+	const results = data.site?.siteInfo?.dictionary?.results;
+	if (results) {
+		return parseDictionary(results);
+	}
+	return {} as DictionaryPhrases;
 };
