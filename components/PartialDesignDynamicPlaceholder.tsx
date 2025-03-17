@@ -1,32 +1,19 @@
-import { Placeholder } from "@/base/Placeholder";
-import type {
-	ComponentFactory,
-	ComponentRendering,
-	EditMode,
-	LayoutServiceData,
-} from "@sitecore-jss/sitecore-jss-nextjs";
+import { PlaceholderComponents } from '@/base/Placeholder/PlaceholderComponents'
+import { PlaceholderMetadata } from '@/base/Placeholder/PlaceholderMetadata'
+import type { JssProps } from "@/lib/types";
 
-type DynamicPlaceholderProps = {
-	rendering: ComponentRendering;
-	layoutData: LayoutServiceData;
-	componentFactory: ComponentFactory;
-	editMode?: EditMode;
-	pageEditing?: boolean;
-};
-
-const PartialDesignDynamicPlaceholder: React.FC<
-	DynamicPlaceholderProps
-> = (props: DynamicPlaceholderProps) => {
-
+const DynamicPlaceholder: React.FC<JssProps> = ({ componentData, sitecoreContext, serverData }) => {
+	const name = componentData.params?.sig || ''
 	return (
-		<Placeholder
-			name={props.rendering?.params?.sig || ""}
-			rendering={props.rendering}
-			componentFactory={props.componentFactory}
-			editMode={props.editMode}
-			pageEditing={props.pageEditing}
-		/>
-	);
-};
+		<PlaceholderMetadata name={name} editMode={sitecoreContext.editMode} placeholders={componentData.placeholders}>
+			<PlaceholderComponents
+				name={name}
+				sitecoreContext={sitecoreContext}
+				serverData={serverData}
+				componentData={componentData}
+			/>
+		</PlaceholderMetadata>
+	)
+}
 
-export default PartialDesignDynamicPlaceholder;
+export const Default = DynamicPlaceholder

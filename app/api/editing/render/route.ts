@@ -42,10 +42,7 @@ export async function GET(request: Request) {
 		params.append("x-vercel-protection-bypass", bypassToken);
 	}
 
-	const redirectUrl = new URL(
-		`?${params.toString()}`,
-		url.origin,
-	);
+	const redirectUrl = new URL(`x-neo-editor?${params.toString()}`, url.origin);
 
 	const draft = await draftMode();
 	draft.enable();

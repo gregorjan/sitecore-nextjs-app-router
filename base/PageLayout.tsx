@@ -1,39 +1,61 @@
 import type {
 	DictionaryPhrases,
 	LayoutServiceData,
-	RouteData,
 } from "@sitecore-jss/sitecore-jss-nextjs";
 import { componentBuilder } from "@/components/builder";
-import { Placeholder } from "./Placeholder";
+import { PlaceholderComponents } from "./Placeholder/PlaceholderComponents";
+import { PlaceholderMetadata } from "./Placeholder/PlaceholderMetadata";
 
+import type { Placeholders } from "@/lib/types";
 interface LayoutProps {
 	layoutData: LayoutServiceData;
 	dictionary: DictionaryPhrases;
+	locale: string
 }
 
 const HEADER_KEY = "-header";
 const FOOTER_KEY = "-footer";
 
-
-export const PageLayout : React.FC<LayoutProps> = ({ layoutData, dictionary }) => {
+export const PageLayout: React.FC<LayoutProps> = ({
+	layoutData,
+	dictionary,
+}) => {
 	const { route, context } = layoutData.sitecore;
-	const { pageEditing, editMode } = context;
+	const { pageEditing, editMode, pageState } = context;
 	const componentFactory = componentBuilder.getComponentFactory();
 
 	const { headerPlaceholders, mainPlaceholders, footerPlaceholders } =
-		Object.keys(route?.placeholders ?? {}).reduce(
-			(acc, placeholderKey) => {
+		Object.entries(route?.placeholders ?? {}).reduce(
+			(acc, [placeholderKey, placeholderValue]) => {
 				const key = placeholderKey.toLowerCase();
+				const placeholders = {
+					[placeholderKey]: placeholderValue,
+				} as Placeholders;
 
 				const placeholder = (
-					<Placeholder
-						key={placeholderKey}
+					<PlaceholderMetadata
+						key={key}
+						editMode={editMode || null}
 						name={placeholderKey}
-						rendering={route as RouteData}
-						editMode={editMode}
-						pageEditing={pageEditing}
-						componentFactory={componentFactory}
-					/>
+						placeholders={placeholders}
+					>
+						<PlaceholderComponents
+							name={placeholderKey}
+							componentData={{
+								placeholders,
+							}}
+							sitecoreContext={{
+								editMode: editMode || null,
+								pageEditing: pageEditing || null,
+								pageState: pageState || null,
+							}}
+							serverData={{
+								route: route,
+								componentFactory: componentFactory,
+								dictionary: dictionary,
+							}}
+						/>
+					</PlaceholderMetadata>
 				);
 
 				if (key.endsWith(HEADER_KEY)) {

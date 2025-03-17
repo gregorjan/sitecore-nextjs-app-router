@@ -1,116 +1,77 @@
-import { MissingComponent } from "../MissingComponent";
+import { MissingComponent } from '../MissingComponent'
+import type { ComponentData, JssProps, Placeholders, SitecoreContext, SitecorePage } from '@/lib/types'
+import { getDynamicPlaceholderPattern, isDynamicPlaceholder } from '@sitecore-jss/sitecore-jss/layout'
+import { PlaceholderMetadata } from './PlaceholderMetadata'
 
-import type { ComponentFactory } from "@sitecore-jss/sitecore-jss-nextjs";
-import {
-	type ComponentRendering,
-	EditMode,
-	type RouteData,
-	getDynamicPlaceholderPattern,
-	isDynamicPlaceholder,
-} from "@sitecore-jss/sitecore-jss/layout";
-import type { ComponentType, PropsWithChildren } from "react";
-import type { ModifyComponentProps } from "./types";
-import type { ComponentProps } from "@/lib/types";
-import { PlaceholderMetadata } from "./PlaceholderMetadata";
-
-export const getPlaceholderDataFromRenderingData = (
-	rendering: ComponentRendering | RouteData,
-	name: string,
-): ComponentRendering[] => {
-	const { placeholders } = rendering;
+export const getPlaceholderDataFromRenderingData = (name: string, placeholders?: Placeholders) => {
 	if (!placeholders) {
 		console.warn(
 			`Placeholder '${name}' was not found in the current rendering data`,
-			JSON.stringify(rendering, null, 2),
-		);
-		return [];
+			JSON.stringify(placeholders, null, 2),
+		)
+		return null
 	}
 
 	if (placeholders[name]) {
-		return placeholders[name] as ComponentRendering[];
+		return placeholders[name]
 	}
 
 	const placeholderEntry = Object.entries(placeholders).find(([key]) => {
-		const pattern = isDynamicPlaceholder(key)
-			? getDynamicPlaceholderPattern(key)
-			: null;
-		return pattern?.test(name);
-	});
+		const pattern = isDynamicPlaceholder(key) ? getDynamicPlaceholderPattern(key) : null
+		return pattern?.test(name)
+	})
 
 	if (placeholderEntry) {
-		const [, placeholder] = placeholderEntry;
-		return placeholder as ComponentRendering[];
+		const [, placeholder] = placeholderEntry
+		return placeholder
 	}
 
-	return [];
-};
+	return null
+}
 
-export const Metadata: React.FC<
-	PropsWithChildren<{
-		rendering: ComponentRendering;
-		name?: string;
-		editMode?: EditMode;
-	}>
-> = ({ children, rendering, name, editMode }) => {
-	if (editMode === EditMode.Metadata) {
-		return (
-			<PlaceholderMetadata
-				key={rendering.uid || name}
-				placeholderName={name}
-				rendering={rendering}
-			>
-				{children}
-			</PlaceholderMetadata>
-		);
-	}
+type TransformedComponentProps = {
+	parentPlaceholderName: string
+	componentData: ComponentData
+	sitecoreContext: SitecoreContext
+	serverData: SitecorePage
+}
 
-	return children;
-};
+export const TransformedComponent: React.FC<TransformedComponentProps> = ({
+	parentPlaceholderName,
+	componentData,
+	sitecoreContext,
+	serverData,
+}) => {
+	const { componentName, params } = componentData
 
-export const TransformedComponent: React.FC<{
-	name: string;
-	rendering: ComponentRendering;
-	componentFactory: ComponentFactory;
-	modifyComponentProps?: ModifyComponentProps;
-	editMode?: EditMode;
-}> = ({ rendering, componentFactory, name, editMode, modifyComponentProps }) => {
-	const componentRendering = rendering;
+	let Component: React.ComponentType<JssProps> | null = null
 
-	let Component: React.ComponentType | null = null;
-
-	if (componentRendering.componentName) {
-		Component = componentFactory(
-			componentRendering.componentName,
-			componentRendering.params?.FieldNames,
-		);
+	if (componentName) {
+		Component = serverData.componentFactory(componentName, params?.FieldNames)
 	}
 
 	if (!Component) {
 		console.error(
-			`Placeholder ${name} contains unknown component ${componentRendering.componentName} ${componentRendering.params?.FieldNames}. Ensure that a React component exists for it, and that it is registered in your componentFactory.js.`,
-		);
-		Component = MissingComponent;
+			`Placeholder ${parentPlaceholderName} contains unknown component ${componentName} ${params?.FieldNames}. Ensure that a React component exists for it, and that it is registered in your componentFactory.js.`,
+		)
+		Component = MissingComponent
 	}
 
-	let finalProps = {
-		fields: componentRendering.fields,
-		params: componentRendering.params,
-		rendering,
-		componentFactory,
-		editMode,
-	} as ComponentProps;
-
-	if (modifyComponentProps) {
-		finalProps = modifyComponentProps(finalProps)
+	const props: JssProps = {
+		componentData,
+		sitecoreContext,
+		serverData,
+		// TODO replace with proper translation
+		T: (key) => serverData.dictionary[key],
 	}
 
 	return (
-		<Metadata
-			editMode={editMode}
-			rendering={componentRendering as ComponentRendering}
-
+		<PlaceholderMetadata
+			uid={componentData.uid}
+			placeholders={componentData.placeholders}
+			editMode={sitecoreContext.editMode}
 		>
-			<Component key={componentRendering.uid} {...finalProps} />
-		</Metadata>
-	);
-};
+			<Component {...props} />
+		</PlaceholderMetadata>
+	)
+}

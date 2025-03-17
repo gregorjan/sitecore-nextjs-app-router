@@ -1,5 +1,3 @@
-"use server";
-
 import type { NextPageProps } from "@/lib/types";
 import { extractPath } from "@/lib/utils/extract-path";
 import { getLayoutData } from "@/lib/graphql/layout";
@@ -22,7 +20,7 @@ export default async function Page({ params }: NextPageProps) {
 		return notFound();
 	}
 
-	return <PageLayout layoutData={layoutData} dictionary={dictionary} />;
+	return <PageLayout layoutData={layoutData} dictionary={dictionary} locale={locale} />;
 }
 
 export async function generateMetadata({
