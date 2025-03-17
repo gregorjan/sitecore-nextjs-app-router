@@ -2,8 +2,6 @@ import { draftMode } from 'next/headers'
 import { type NextRequest, NextResponse } from 'next/server'
 import { serverConfig } from './lib/config.server'
 
-
-
 export async function middleware(request: NextRequest) {
 	const { pathname } = request.nextUrl
 
