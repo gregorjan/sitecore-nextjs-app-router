@@ -1,6 +1,6 @@
+import { formatZodError } from '@/lib/utils/format-zod-error'
 import type React from 'react'
 import type { ZodType, z } from 'zod'
-import { formatZodError } from '@/lib/utils/format-zod-error'
 import { DevError } from './DevError'
 
 export function withValidatedProps<T extends ZodType>(schema: T) {
@@ -10,7 +10,9 @@ export function withValidatedProps<T extends ZodType>(schema: T) {
 
 			if (!success) {
 				console.error(formatZodError(error, `Component ${Component.displayName} is missing required props`))
-				return <DevError pageState={props.sitecoreContext.pageState}>unexpected error check console for details</DevError>
+				return (
+					<DevError pageState={props.sitecoreContext.pageState}>unexpected error check console for details</DevError>
+				)
 			}
 
 			return <Component {...data} />

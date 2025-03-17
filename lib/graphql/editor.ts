@@ -1,16 +1,9 @@
-import {
-	GraphQLEditingService,
-	LayoutKind,
-} from "@sitecore-jss/sitecore-jss/editing";
-import { gql } from "graphql-request";
-import { client } from "./client";
-import type { GraphQLEditingQueryResponse } from "@sitecore-jss/sitecore-jss/types/editing/graphql-editing-service";
-import { parseDictionary } from "../utils/parse-dictionary";
-import {
-	type DictionaryPhrases,
-	EditMode,
-	type LayoutServiceData,
-} from "@sitecore-jss/sitecore-jss-nextjs";
+import { type DictionaryPhrases, EditMode, type LayoutServiceData } from '@sitecore-jss/sitecore-jss-nextjs'
+import { GraphQLEditingService, LayoutKind } from '@sitecore-jss/sitecore-jss/editing'
+import type { GraphQLEditingQueryResponse } from '@sitecore-jss/sitecore-jss/types/editing/graphql-editing-service'
+import { gql } from 'graphql-request'
+import { parseDictionary } from '../utils/parse-dictionary'
+import { client } from './client'
 
 export const editingQuery = gql`
  query EditingQuery(
@@ -33,15 +26,15 @@ export const editingQuery = gql`
       }
     }
   }
-`;
+`
 
 type EditingDataParams = {
-	siteName: string;
-	itemId: string;
-	locale: string;
-	version?: string;
-	layoutKind: string;
-};
+	siteName: string
+	itemId: string
+	locale: string
+	version?: string
+	layoutKind: string
+}
 
 export const getEditingData = async ({
 	itemId,
@@ -60,21 +53,18 @@ export const getEditingData = async ({
 		},
 		{
 			sc_layoutKind: layoutKind,
-      sc_editMode: 'true',
+			sc_editMode: 'true',
 		},
-	);
+	)
 
-	const dictionary = parseDictionary(
-		editingData.site.siteInfo.dictionary.results,
-	);
-
+	const dictionary = parseDictionary(editingData.site.siteInfo.dictionary.results)
 
 	const layoutData = editingData?.item?.rendered || {
 		sitecore: {
 			context: { pageEditing: true, locale, editMode: EditMode.Metadata },
 			route: null,
 		},
-	};
+	}
 
-	return [layoutData, dictionary];
-};
+	return [layoutData, dictionary]
+}

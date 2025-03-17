@@ -1,6 +1,6 @@
-import { type NextRequest, NextResponse } from "next/server";
-import { serverConfig } from "./lib/config.server";
 import { draftMode } from 'next/headers'
+import { type NextRequest, NextResponse } from 'next/server'
+import { serverConfig } from './lib/config.server'
 
 //TODO extract to environemnt variables
 const locales = ['en', 'de']

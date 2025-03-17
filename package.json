@@ -6,12 +6,13 @@
 		"dev": "next dev",
 		"build": "next build",
 		"start": "next start",
-		"lint": "next lint"
+		"lint": "next lint",
+		"biome:check": "biome check . --error-on-warnings",
+		"biome:fix": "biome check . --write --unsafe"
 	},
 	"dependencies": {
 		"@next/env": "^15.2.1",
 		"@sitecore-jss/sitecore-jss": "~22.5.2",
-		"@sitecore-jss/sitecore-jss-nextjs": "~22.5.2",
 		"@tailwindcss/postcss": "^4.0.12",
 		"next": "^15.2.1",
 		"react": "^19.0.0",
@@ -20,6 +21,7 @@
 		"zod": "^3.24.2"
 	},
 	"devDependencies": {
+		"@biomejs/biome": "^1.9.4",
 		"@types/node": "^20.17.24",
 		"@types/react": "^18.3.18",
 		"@types/react-dom": "^18.3.5",

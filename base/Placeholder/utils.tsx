@@ -1,6 +1,6 @@
-import { MissingComponent } from '../MissingComponent'
 import type { ComponentData, JssProps, Placeholders, SitecoreContext, SitecorePage } from '@/lib/types'
 import { getDynamicPlaceholderPattern, isDynamicPlaceholder } from '@sitecore-jss/sitecore-jss/layout'
+import { MissingComponent } from '../MissingComponent'
 import { PlaceholderMetadata } from './PlaceholderMetadata'
 
 export const getPlaceholderDataFromRenderingData = (name: string, placeholders?: Placeholders) => {
