@@ -1,32 +1,32 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { serverConfig } from "./lib/config.server";
+import { draftMode } from 'next/headers'
 
-const locales = ["en", "de"];
+//TODO extract to environemnt variables
+const locales = ['en', 'de']
 
-export function middleware(request: NextRequest) {
-	const { pathname, searchParams } = request.nextUrl;
+export async function middleware(request: NextRequest) {
+	const { pathname } = request.nextUrl
 
-	const pageEditing = searchParams.get('mode') === 'edit'
-	if(pageEditing) return
-	
-	const pathnameHasLocale = locales.some(
-		(locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`,
-	);
+	const { isEnabled } = await draftMode()
+	const pageEditing = isEnabled && pathname.startsWith('/x-neo-editor')
 
-	if (pathnameHasLocale) return;
+	if (pageEditing) return
 
-	const acceptLanguageHeader = request.headers.get("accept-language");
+	const pathnameHasLocale = locales.some((locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`)
+
+	if (pathnameHasLocale) return
+
+	const acceptLanguageHeader = request.headers.get('accept-language')
 
 	const locale =
-		acceptLanguageHeader && locales.includes(acceptLanguageHeader)
-			? acceptLanguageHeader
-			: serverConfig.defaultLanguage;
+		acceptLanguageHeader && locales.includes(acceptLanguageHeader) ? acceptLanguageHeader : serverConfig.defaultLanguage
 
-	request.nextUrl.pathname = `/${locale}${pathname}`;
+	request.nextUrl.pathname = `/${locale}${pathname}`
 
-	return NextResponse.redirect(request.nextUrl);
+	return NextResponse.redirect(request.nextUrl)
 }
 
 export const config = {
-	matcher: ['/', '/((?!api/|_next/|healthz|sitecore/api/|-/|favicon.ico).*)'],
-};
+	matcher: ['/', '/((?!api/|_next/|healthz|sitecore/api/|-/|favicon.ico|sitemap.xml).*)'],
+}

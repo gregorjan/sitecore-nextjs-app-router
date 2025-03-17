@@ -1,13 +1,19 @@
-import { ComponentBuilder } from '@sitecore-jss/sitecore-jss-nextjs'
+import { ComponentBuilder } from "@sitecore-jss/sitecore-jss-nextjs";
 
-import * as PartialDesignDynamicPlaceholder from './PartialDesignDynamicPlaceholder'
-import * as RichText from './RichText'
+import * as PartialDesignDynamicPlaceholder from "./PartialDesignDynamicPlaceholder";
 
-export const components = new Map()
+export const components = new Map();
 
-components.set('PartialDesignDynamicPlaceholder', PartialDesignDynamicPlaceholder)
-components.set('RichText', RichText)
+import dynamic from "next/dynamic";
 
-export const componentBuilder = new ComponentBuilder({ components })
+components.set(
+	"PartialDesignDynamicPlaceholder",
+	PartialDesignDynamicPlaceholder,
+);
+components.set("RichText", {
+	Default: dynamic(() => import("./RichText/Default")),
+});
 
-export const moduleFactory = componentBuilder.getModuleFactory()
+export const componentBuilder = new ComponentBuilder({ components });
+
+export const moduleFactory = componentBuilder.getModuleFactory();

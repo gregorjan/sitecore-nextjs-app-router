@@ -1,69 +1,78 @@
+import type { EditMode, Placeholders } from '@/lib/types'
 import { DEFAULT_PLACEHOLDER_UID, MetadataKind } from '@sitecore-jss/sitecore-jss/editing'
-import {
-	type ComponentRendering,
-	type RouteData,
-	getDynamicPlaceholderPattern,
-	isDynamicPlaceholder,
-} from '@sitecore-jss/sitecore-jss/layout'
-import type { ReactNode } from 'react'
-
-interface PlaceholderMetadataProps {
-	rendering: ComponentRendering
-	placeholderName?: string
-	children?: ReactNode
-}
+import { getDynamicPlaceholderPattern, isDynamicPlaceholder } from '@sitecore-jss/sitecore-jss/layout'
+import type { PropsWithChildren, ReactNode } from 'react'
 
 type CodeBlockAttributes = {
 	type: string
 	chrometype: string
 	className: string
 	kind: string
-	id?: string
+	id: string
 }
 
 type MetadataCodeProps = {
-	rendering: ComponentRendering | RouteData
 	kind: MetadataKind
-	placeholderName?: string
+	chrometype: 'placeholder' | 'rendering'
+	id: string
 }
 
-const MetadataCode: React.FC<MetadataCodeProps> = ({ rendering, kind, placeholderName }) => {
-	const { uid, placeholders } = rendering as ComponentRendering
-	const chrometype = placeholderName ? 'placeholder' : 'rendering'
-
+const MetadataCode: React.FC<MetadataCodeProps> = ({ id, kind, chrometype }) => {
 	const attributes: CodeBlockAttributes = {
 		type: 'text/sitecore',
 		chrometype,
 		className: 'scpm',
 		kind,
-		id: uid || DEFAULT_PLACEHOLDER_UID,
-	}
-
-	if (placeholders && kind === MetadataKind.Open && chrometype === 'placeholder' && placeholderName) {
-		const matchedPlaceholder = Object.keys(placeholders).find(
-			(placeholder) =>
-				placeholder === placeholderName ||
-				(isDynamicPlaceholder(placeholder) && getDynamicPlaceholderPattern(placeholder).test(placeholderName)),
-		)
-
-		if (matchedPlaceholder) {
-			attributes.id = `${matchedPlaceholder}_${attributes.id}`
-		}
+		id,
 	}
 
 	return <code {...attributes} />
 }
 
-export const PlaceholderMetadata = ({
-	rendering,
-	placeholderName,
-	children,
-}: PlaceholderMetadataProps) => {
+interface MetadataProps {
+	id: string
+	chrometype: 'placeholder' | 'rendering'
+	children?: ReactNode
+}
+
+export const Metadata: React.FC<MetadataProps> = ({ id, chrometype, children }) => {
 	return (
 		<>
-			<MetadataCode rendering={rendering} placeholderName={placeholderName} kind={MetadataKind.Open} />
+			<MetadataCode id={id} chrometype={chrometype} kind={MetadataKind.Open} />
 			{children}
-			<MetadataCode rendering={rendering} placeholderName={placeholderName} kind={MetadataKind.Close} />
+			<MetadataCode id={id} chrometype={chrometype} kind={MetadataKind.Close} />
 		</>
 	)
+}
+
+export const PlaceholderMetadata: React.FC<
+	PropsWithChildren<{
+		uid?: string
+		name?: string
+		editMode: EditMode
+		placeholders: Placeholders
+	}>
+> = ({ uid = DEFAULT_PLACEHOLDER_UID, editMode, placeholders, name, children }) => {
+	if (editMode === 'metadata') {
+		let id = uid
+		if (placeholders && name) {
+			const matchedPlaceholder = Object.keys(placeholders).find(
+				(placeholder) =>
+					placeholder === name ||
+					(isDynamicPlaceholder(placeholder) && getDynamicPlaceholderPattern(placeholder).test(name)),
+			)
+
+			if (matchedPlaceholder) {
+				id = `${matchedPlaceholder}_${uid}`
+			}
+		}
+
+		return (
+			<Metadata key={uid || name} id={id} chrometype={name ? 'placeholder' : 'rendering'}>
+				{children}
+			</Metadata>
+		)
+	}
+
+	return children
 }
