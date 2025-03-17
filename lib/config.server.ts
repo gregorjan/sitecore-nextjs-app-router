@@ -4,7 +4,8 @@ import { checkEnv } from './utils/check-env'
 
 const serverConfigMap = {
 	sitecoreSiteName: process.env.SITECORE_SITE_NAME as string,
-	defaultLanguage: process.env.DEFAULT_LANGUAGE as string,
+	defaultLocale: process.env.DEFAULT_LOCALE as string,
+	locales: process.env.LOCALES as string,
 	sitecoreEdgeUrl: process.env.SITECORE_EDGE_URL as string,
 	sitecoreEdgeContextId: process.env.SITECORE_EDGE_CONTEXT_ID as string,
 	jssEditingSecret: process.env.JSS_EDITING_SECRET as string,

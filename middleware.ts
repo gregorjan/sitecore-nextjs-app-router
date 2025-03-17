@@ -2,16 +2,17 @@ import { draftMode } from 'next/headers'
 import { type NextRequest, NextResponse } from 'next/server'
 import { serverConfig } from './lib/config.server'
 
-//TODO extract to environemnt variables
-const locales = ['en', 'de']
+
 
 export async function middleware(request: NextRequest) {
 	const { pathname } = request.nextUrl
 
 	const { isEnabled } = await draftMode()
-	const pageEditing = isEnabled && pathname.startsWith('/x-neo-editor')
+	const pageEditing = isEnabled && pathname.startsWith('/x-editor-jss-route')
 
 	if (pageEditing) return
+
+	const locales = serverConfig.locales
 
 	const pathnameHasLocale = locales.some((locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`)
 
@@ -20,7 +21,7 @@ export async function middleware(request: NextRequest) {
 	const acceptLanguageHeader = request.headers.get('accept-language')
 
 	const locale =
-		acceptLanguageHeader && locales.includes(acceptLanguageHeader) ? acceptLanguageHeader : serverConfig.defaultLanguage
+		acceptLanguageHeader && locales.includes(acceptLanguageHeader) ? acceptLanguageHeader : serverConfig.defaultLocale
 
 	request.nextUrl.pathname = `/${locale}${pathname}`
 
