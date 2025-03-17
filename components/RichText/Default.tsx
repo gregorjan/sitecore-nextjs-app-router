@@ -1,7 +1,7 @@
-import { RichText as RichTextAtom } from "@/atoms/RichText";
-import { withValidatedProps } from "@/atoms/withValidatedProps";
-import { JsonValueSchema, ComponentDataSchema, JssDatasourcePropsSchema } from "@/lib/types";
-import { z } from "zod";
+import { RichText as RichTextAtom } from '@/atoms/RichText'
+import { withValidatedProps } from '@/atoms/withValidatedProps'
+import { ComponentDataSchema, JsonValueSchema, JssDatasourcePropsSchema } from '@/lib/types'
+import { z } from 'zod'
 
 export const RichTextSchema = JssDatasourcePropsSchema.extend({
 	componentData: ComponentDataSchema.extend({
@@ -15,19 +15,17 @@ export const RichTextSchema = JssDatasourcePropsSchema.extend({
 	}),
 })
 
-export default withValidatedProps(RichTextSchema)(
-	({componentData}) => {
-		const { datasource } = componentData.fields.data
-	
-		const text = datasource?.text?.jsonValue;
-	
-		const uniqueId = componentData?.uid;
-		const anchorId = componentData.params?.RenderingIdentifier;
-	
-		return (
-			<div key={uniqueId} id={anchorId || uniqueId}>
-				<RichTextAtom field={text} />
-			</div>
-		);
-	}
-)
+export default withValidatedProps(RichTextSchema)(({ componentData }) => {
+	const { datasource } = componentData.fields.data
+
+	const text = datasource?.text?.jsonValue
+
+	const uniqueId = componentData?.uid
+	const anchorId = componentData.params?.RenderingIdentifier
+
+	return (
+		<div key={uniqueId} id={anchorId || uniqueId}>
+			<RichTextAtom field={text} />
+		</div>
+	)
+})

@@ -1,9 +1,9 @@
-import type { DictionaryPhrases } from "@sitecore-jss/sitecore-jss-nextjs";
-import { gql } from "graphql-request";
-import { client } from "./client";
-import type { DictionarySiteQueryResponse } from "@sitecore-jss/sitecore-jss/types/i18n/graphql-dictionary-service";
-import { parseDictionary } from "../utils/parse-dictionary";
-import { serverConfig } from "../config.server";
+import type { DictionaryPhrases } from '@sitecore-jss/sitecore-jss-nextjs'
+import type { DictionarySiteQueryResponse } from '@sitecore-jss/sitecore-jss/types/i18n/graphql-dictionary-service'
+import { gql } from 'graphql-request'
+import { serverConfig } from '../config.server'
+import { parseDictionary } from '../utils/parse-dictionary'
+import { client } from './client'
 
 const dictionaryQuery = gql`
  query DictionarySiteQuery(
@@ -21,22 +21,17 @@ const dictionaryQuery = gql`
      }
    }
  }
-`;
+`
 
-export const getDictionaryData = async (
-	language?: string,
-): Promise<DictionaryPhrases> => {
-	const data = await client.request<DictionarySiteQueryResponse>(
-		dictionaryQuery,
-		{
-			siteName: serverConfig.sitecoreSiteName,
-			language,
-		},
-	);
+export const getDictionaryData = async (language?: string): Promise<DictionaryPhrases> => {
+	const data = await client.request<DictionarySiteQueryResponse>(dictionaryQuery, {
+		siteName: serverConfig.sitecoreSiteName,
+		language,
+	})
 
-	const results = data.site?.siteInfo?.dictionary?.results;
+	const results = data.site?.siteInfo?.dictionary?.results
 	if (results) {
-		return parseDictionary(results);
+		return parseDictionary(results)
 	}
-	return {} as DictionaryPhrases;
-};
+	return {} as DictionaryPhrases
+}

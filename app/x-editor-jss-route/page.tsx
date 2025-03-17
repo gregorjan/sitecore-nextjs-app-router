@@ -1,14 +1,14 @@
-import type { NextPageProps } from "@/lib/types";
-import { draftMode } from "next/headers";
-import { PreviewSearchParamsSchema } from "@/lib/utils/schemas";
-import { formatZodError } from "@/lib/utils/format-zod-error";
-import { serverConfig } from "@/lib/config.server";
-import { getEditingData } from "@/lib/graphql/editor";
-import { PageLayout } from "@/base/PageLayout";
-import { EditingScripts } from "@/atoms/EditingScripts";
-import { Inter } from "next/font/google";
+import { EditingScripts } from '@/atoms/EditingScripts'
+import { PageLayout } from '@/base/PageLayout'
+import { serverConfig } from '@/lib/config.server'
+import { getEditingData } from '@/lib/graphql/editor'
+import type { NextPageProps } from '@/lib/types'
+import { formatZodError } from '@/lib/utils/format-zod-error'
+import { PreviewSearchParamsSchema } from '@/lib/utils/schemas'
+import { Inter } from 'next/font/google'
+import { draftMode } from 'next/headers'
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] })
 
 export default async function Page(props: NextPageProps) {
 	const { isEnabled } = await draftMode()
